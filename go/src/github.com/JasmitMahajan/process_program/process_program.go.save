@@ -1,0 +1,66 @@
+package main
+
+import (
+	"fmt"
+	"os/user"
+	"os/exec"
+//	"os"
+	"io/ioutil"
+	"log"
+	"strconv"
+	"syscall"
+)
+
+func main(){
+	proc, err := ioutil.ReadDir("/proc")
+	if err != nil{
+		log.Fatal(err)
+	}
+
+	for _, ent := range proc{
+
+		i := 0
+		i++
+		/*
+		info, _ := os.Stat("/proc")
+		var UID int
+		if stat, ok := info.Sys().(*syscall.Ucred); ok {
+			UID = int(stat.Uid)
+		} else {
+			UID = os.Getuid()
+		}
+		*/
+
+		myuser, _ := user.Current()
+		uid, _ := strconv.Atoi(myuser.Uid)
+		cmd.SysProcAttr = &syscall.SysProcAttr{}
+		cmd.SysProcAttr.Credential = &syscall.Credential{Uid: uint32(uid)}
+		out, err_3 := cmd.Output()
+		if err_3 != nil {
+			log.Fatal(err_3)
+		}
+		var id int64
+		id, err_2 := strconv.ParseInt(ent.Name(), 10, 64)
+		if err_2 != nil{
+			log.Fatal(err_2)
+		}
+		if 0 == id{
+			continue
+		}
+		/*
+		user, err_3 := user.Lookup(os.ExpandEnv("$USER"))
+		if err_3 != nil{
+			log.Fatal(err_3)
+		}
+		*/
+
+		/*
+		hostname, err_3 := os.Hostname()
+		if err_3 != nil{
+			log.Fatal(err_3)
+		}
+		*/
+		fmt.Println(out)
+		fmt.Printf("pid:%d\t\n", id)
+	}
+}
