@@ -2,14 +2,12 @@
 #include <utmp.h>
 #include <sys/utsname.h>
 #include <dirent.h>
-//#include <pwd.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <sys/stat.h>
 #include <string.h>
 
 int main(){
-//        struct passwd *password = calloc(1, sizeof(struct passwd));
         struct utmp *name;
         DIR* proc = opendir("/proc");
         struct dirent* ent;
@@ -47,3 +45,5 @@ int main(){
 		printf("pid: %ld, uid: %lld\n", id, (unsigned long long)sb.st_uid);
 	}
 }
+
+
